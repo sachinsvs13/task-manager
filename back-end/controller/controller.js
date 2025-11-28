@@ -1,0 +1,58 @@
+const Task = require('../models/schema.js');
+
+const getAllTasks = async (req, res) => {
+  try {
+    const tasks = await Task.find({});
+    res.status(200).json({ tasks });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+const getSingleTask = (req,res) => {
+  try {
+    const {id : taskId} = req.params;
+    const task = Task.findOne({_id: taskId});
+    res.status(200).json({ task });
+    if(!task){
+      return res.status(404).json({msg: `No task with id : ${taskId}`});
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+const createTask = async (req,res) => {
+  try {
+    const task = await Task.create(req.body);
+    res.status(201).json({ task });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+const updateTask = (req,res) => {
+  res.send('Update an existing task');
+}
+
+const deleteTask = (req,res) => {
+  try {
+  const {id : taskId} = req.params;
+  const task = Task.findOneAndDelete({_id: taskId});
+  res.status(200).json({ task });
+  if(!task){
+    return res.status(404).json({msg: `No task with id : ${taskId}`});
+  }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
+
+module.exports = {
+    getAllTasks,
+    getSingleTask,
+    createTask,
+    updateTask,
+    deleteTask
+};
