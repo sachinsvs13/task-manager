@@ -10,7 +10,16 @@ const getAllTasks = async (req, res) => {
 }
 
 const getSingleTask = (req,res) => {
-  res.json({id : req.params.id, message: 'Retrieve a single task'});
+  try {
+    const {id : taskId} = req.params;
+    const task = Task.findOne({_id: taskId});
+    res.status(200).json({ task });
+    if(!task){
+      return res.status(404).json({msg: `No task with id : ${taskId}`});
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
 const createTask = async (req,res) => {
@@ -27,7 +36,16 @@ const updateTask = (req,res) => {
 }
 
 const deleteTask = (req,res) => {
-  res.send('Delete a task');
+  try {
+  const {id : taskId} = req.params;
+  const task = Task.findOneAndDelete({_id: taskId});
+  res.status(200).json({ task });
+  if(!task){
+    return res.status(404).json({msg: `No task with id : ${taskId}`});
+  }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
 
