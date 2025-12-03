@@ -9,10 +9,10 @@ const getAllTasks = async (req, res) => {
   }
 };
 
-const getSingleTask = (req, res) => {
+const getSingleTask = async (req, res) => {
   try {
     const { id: taskId } = req.params;
-    const task = Task.findOne({ _id: taskId });
+    const task = await Task.findOne({ _id: taskId });
     res.status(200).json({ task });
     if (!task) {
       return res.status(404).json({ msg: `No task with id : ${taskId}` });
@@ -47,10 +47,10 @@ const updateTask = async (req, res) => {
   }
 };
 
-const deleteTask = (req, res) => {
+const deleteTask = async (req, res) => {
   try {
     const { id: taskId } = req.params;
-    const task = Task.findOneAndDelete({ _id: taskId });
+    const task = await Task.findOneAndDelete({ _id: taskId });
     res.status(200).json({ task });
     if (!task) {
       return res.status(404).json({ msg: `No task with id : ${taskId}` });

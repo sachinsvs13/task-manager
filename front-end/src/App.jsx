@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import axios from "axios";
-import ShowTasks from "./ShowTask";
+import { MdOutlineDelete } from "react-icons/md";
+import { MdEdit } from "react-icons/md";
 
 function App() {
   const [handleAddTask, setHandleAddTask] = useState([]);
@@ -9,19 +10,22 @@ function App() {
 
   const addTask = (formData) => {
     const newTask = formData.get("taskInput");
-    setHandleAddTask((prevTasks) => [...prevTasks, newTask]);
+    setTasks((prevTasks) => [...prevTasks, newTask]);
   };
 
-  // axios
-  //   .post("http://localhost:3000/api/v1/tasks", {
-  //     name: addTask,
-  //   })
-  //   .then((response) => {
-  //     console.log(response.data);
-  //   })
-  //   .catch((error) => {
-  //     console.error("There was an error!", error.message);
-  //   });
+  const createTask = () => {
+    axios
+      .post("http://localhost:3000/api/v1/tasks", {
+        name: addTask,
+      })
+      .then((response) => {
+        console.log("Task created:", response.data);
+      })
+      .catch((error) => {
+        console.error("There was an error creating the task!", error.message);
+      });
+  };
+
   useEffect(() => {
     axios
       .get("http://localhost:3000/api/v1/tasks")
@@ -33,7 +37,18 @@ function App() {
         console.error("There was an error!", error.message);
       });
   }, []);
-  tasks.map((task) => console.log(task.name));
+  tasks.map((task) => console.log(task._id));
+
+  const DeleteTask = (id) => {
+    axios
+      .delete(`http://localhost:3000/api/v1/tasks/${id}`)
+      .then((response) => {
+        console.log("Task deleted:", response.data);
+      })
+      .catch((error) => {
+        console.error("There was an error deleting the task!", error.message);
+      });
+  };
 
   return (
     <>
@@ -48,9 +63,26 @@ function App() {
             className="task-input"
             name="taskInput"
           />
-          <button className="add-task-button">Add Task</button>
+          <button className="add-task-button" onClick={createTask}>
+            Add Task
+          </button>
         </form>
         <ul className="task-list">
+          {tasks.map((task, index) => (
+            <li key={index} className="task-item">
+              {task.name}
+              {task._id}
+              <button
+                className="btn"
+                onClick={DeleteTask("693052e8376750cb904482a0")}
+              >
+                <MdOutlineDelete />
+              </button>
+              <button className="btn">
+                <MdEdit />
+              </button>
+            </li>
+          ))}
           {tasks && <pre>{JSON.stringify(tasks, null, 2)}</pre>}
           {handleAddTask.map((task, index) => (
             <li key={index} className="task-item">
