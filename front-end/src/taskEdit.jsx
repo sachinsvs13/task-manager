@@ -1,16 +1,33 @@
 import React from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
+import "./taskEdit.css";
 
 const TaskEdit = () => {
+  const { id } = useParams();
+  const [task, setTask] = React.useState([]);
 
-    
-  const updateTask = (id) => {
+  React.useEffect(() => {
     axios
-      .patch(`http://localhost:3000/api/v1/tasks/${id}`, {
-        // update data here
+      .get(`http://localhost:3000/api/v1/tasks/${id}`)
+      .then((response) => {
+        setTask(response.data.task);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the task!", error.message);
+      });
+  }, [id]);
+
+  console.log(task);
+
+  const updateTask = (taskId) => {
+    axios
+      .patch(`http://localhost:3000/api/v1/tasks/${taskId}`, {
+        name: task.name,
+        completed: task.completed,
       })
       .then(() => {
-        // handle success
+        // Handle success (e.g., show a success message or redirect)
       })
       .catch((error) => {
         console.error("There was an error updating the task!", error.message);
@@ -18,25 +35,28 @@ const TaskEdit = () => {
   };
 
   return (
-    <div>
-      <h2>Edit Task</h2>
+    <div className="task-edit-container">
+      <h1>Edit Task</h1>
       {/* Form for editing task */}
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          updateTask(/* pass task id here */);
+          updateTask(task._id);
         }}
+        className="edit-form"
       >
-        <label>Task ID:</label>
-        <label>Task Name:</label>
-        <label>
-          Completed :
-          <input
-            type="checkbox"
-            name="completed" /* checked and onChange handler here */
-          />
-        </label>
-        <input type="text" name="name" /* value and onChange handler here */ />
+        <div className="form-group">
+          <label>Task ID:</label>
+          <input type="text" value={task._id} readOnly />
+        </div>
+        <div className="form-group">
+          <label>Task Name:</label>
+          <input type="text" value={task.name} />
+        </div>
+        <div className="form-group">
+          <label>Completed:</label>
+          <input type="checkbox" checked={task.completed} readOnly />
+        </div>
         <button type="submit">Update Task</button>
       </form>
     </div>

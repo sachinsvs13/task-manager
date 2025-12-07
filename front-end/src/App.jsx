@@ -4,6 +4,7 @@ import axios from "axios";
 import { MdOutlineDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
+import TaskEdit from "./taskEdit";
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -71,6 +72,7 @@ function App() {
     console.log("Edit task with id:", id);
   };
 
+  
   return (
     <>
       <header className="task-header">
@@ -93,10 +95,10 @@ function App() {
         </form>
         {alert.show && (
           <p
-            className={`alert ${
-              alert.type === "success" ? "text-success" : ""
+          className={`alert ${
+            alert.type === "success" ? "text-success" : ""
             }`}
-          >
+            >
             {alert.msg}
           </p>
         )}
@@ -106,6 +108,9 @@ function App() {
         <ul className="task-list">
           {tasks.map((task, index) => (
             <li key={index} className="task-item">
+              {/* { have to add inline to the true statement
+                task.completed ? task.name : task.name
+                } */}
               {task.name}
               <button className="btn" onClick={() => DeleteTask(task._id)}>
                 <MdOutlineDelete />
