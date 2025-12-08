@@ -72,7 +72,6 @@ function App() {
     console.log("Edit task with id:", id);
   };
 
-  
   return (
     <>
       <header className="task-header">
@@ -95,10 +94,10 @@ function App() {
         </form>
         {alert.show && (
           <p
-          className={`alert ${
-            alert.type === "success" ? "text-success" : ""
+            className={`alert ${
+              alert.type === "success" ? "text-success" : ""
             }`}
-            >
+          >
             {alert.msg}
           </p>
         )}
@@ -111,15 +110,31 @@ function App() {
               {/* { have to add inline to the true statement
                 task.completed ? task.name : task.name
                 } */}
-              {task.name}
-              <button className="btn" onClick={() => DeleteTask(task._id)}>
-                <MdOutlineDelete />
-              </button>
-              <button className="btn" onClick={() => editTask(task._id)}>
-                <Link to={`/tasks/${task._id}`}>
-                  <MdEdit />
-                </Link>
-              </button>
+              {task.completed ? (
+                <s>
+                  {task.name}
+                  <button className="btn" onClick={() => DeleteTask(task._id)}>
+                    <MdOutlineDelete />
+                  </button>
+                  <button className="btn" onClick={() => editTask(task._id)}>
+                    <Link to={`/tasks/${task._id}`}>
+                      <MdEdit />
+                    </Link>
+                  </button>
+                </s>
+              ) : (
+                <>
+                  {task.name}
+                  <button className="btn" onClick={() => DeleteTask(task._id)}>
+                    <MdOutlineDelete />
+                  </button>
+                  <button className="btn" onClick={() => editTask(task._id)}>
+                    <Link to={`/tasks/${task._id}`}>
+                      <MdEdit />
+                    </Link>
+                  </button>
+                </>
+              )}
             </li>
           ))}
         </ul>

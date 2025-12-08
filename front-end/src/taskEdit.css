@@ -67,10 +67,8 @@ button[type="submit"] {
   border: none;
   background-color: #4caf50;
   cursor: pointer;
-  border: 1px solid #eee;
   transition: background-color 0.3s ease;
-  margin-top: 1rem;
-  margin: 0rem;
+  margin : 0;
   flex: 1 0 auto;
 }
 button[type="submit"]:hover {
